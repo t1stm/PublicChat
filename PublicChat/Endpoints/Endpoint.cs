@@ -1,9 +1,9 @@
 using vtortola.WebSockets;
 
-namespace PublicChat;
+namespace PublicChat.Endpoints;
 
 public abstract class Endpoint
 {
     public abstract string Location { get; set; }
-    public abstract Task HandleConnection(WebSocket web_socket, CancellationToken? cancellation_token);
+    public abstract Task HandleConnection(WebSocket web_socket, string[] split_request, CancellationToken? cancellation_token);
 }
