@@ -9,5 +9,7 @@ public struct Message
     [JsonInclude]
     public string Text;
     [JsonInclude]
-    public string Sender;
+    public string? Sender;
+    [JsonInclude]
+    public long SenderID { get; set; }
 }

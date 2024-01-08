@@ -38,6 +38,9 @@ public class ChatEndpoint : Endpoint
                 username = split_request[2];
                 break;
         }
+        
+        if (username == "Anonymous") 
+            username = null;
 
         if (room == null)
         {
@@ -48,7 +51,7 @@ public class ChatEndpoint : Endpoint
         {
             ID = room.GetConnectionID(),
             IP_Address = web_socket.RemoteEndpoint.Serialize(),
-            Username = username ?? "Anonymous"
+            Username = username
         };
 
         room.AddMember(member);
@@ -65,13 +68,18 @@ public class ChatEndpoint : Endpoint
 
                 var broadcast_message = new Message
                 {
-                    Sender = member.Username,
+                    Sender = member.StyledUsername,
+                    SenderID = member.ID,
                     SendTime = DateTime.Now,
                     Text = message
                 };
-                
+
                 await room.Broadcast(broadcast_message);
             }
+        }
+        catch (WebSocketException e)
+        {
+            await Console.Out.WriteLineAsync($"[ChatEndpoint] {e.Message}");
         }
         finally
         {
